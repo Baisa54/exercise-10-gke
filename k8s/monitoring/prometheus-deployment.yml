@@ -1,1 +1,44 @@
-# TODO: Prometheus Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: node-registry
+  labels:
+    app: prometheus
+    app.kubernetes.io/name: prometheus
+    app.kubernetes.io/part-of: node-registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+        app.kubernetes.io/name: prometheus
+        app.kubernetes.io/part-of: node-registry
+    spec:
+      containers:
+        - name: prometheus
+          image: prom/prometheus:v2.54.0
+          args:
+            - "--config.file=/etc/prometheus/prometheus.yml"
+            - "--storage.tsdb.path=/prometheus"
+          ports:
+            - name: web
+              containerPort: 9090
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/prometheus
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+      volumes:
+        - name: config-volume
+          configMap:
+            name: prometheus-config

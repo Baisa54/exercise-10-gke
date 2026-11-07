@@ -1,1 +1,7 @@
-# TODO: Namespace for the application
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: node-registry
+  labels:
+    app.kubernetes.io/name: node-registry
+    app.kubernetes.io/part-of: node-registry

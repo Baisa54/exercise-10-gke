@@ -1,1 +1,18 @@
-# TODO: PostgreSQL Service (ClusterIP)
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  namespace: node-registry
+  labels:
+    app: postgres
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/part-of: node-registry
+spec:
+  type: ClusterIP
+  selector:
+    app: postgres
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: 5432
+      protocol: TCP
